@@ -57,7 +57,37 @@ video_path = "path/to/your/video.mp4"
 analyzer.process_video(video_path)
 
 ```
+## Movement Analysis Metrics
 
+The system calculates three key metrics to analyze movement patterns:
+
+![Movement Analysis Visualization](assets/keypoint_movement_visualization.jpg)
+
+
+#### 1. Trajectory Similarity (trajectory_cos_sim)
+- Measures how closely the current movement follows the expected path using cosine similarity
+- Range: [-1 to 1]
+  - 1: Movements are identical in direction
+  - 0: Movements are perpendicular
+  - -1: Movements are in opposite directions
+- Useful for detecting if a climber is following a similar path to previous attempts
+
+#### 2. Velocity Ratio (velocity_ratio)
+- Compares the current movement speed to the average speed over the previous window
+- Interpretation:
+  - > 1: Moving faster than the average historical speed
+  - = 1: Moving at the same speed as the average
+  - < 1: Moving slower than the average historical speed
+- Helps identify acceleration/deceleration patterns and potential resting points
+
+#### 3. Cumulative Distance (cumulative_distance)
+- Total distance traveled by all keypoints over the analysis window
+- Measured in pixels (or the units of your coordinate system)
+- Higher values indicate more overall movement
+- Useful for:
+  - Detecting static vs. dynamic sequences
+  - Identifying rest periods (low values)
+  - Quantifying the amount of movement in a sequence
 
 ## Output
 The script generates:
