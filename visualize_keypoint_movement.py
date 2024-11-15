@@ -5,6 +5,7 @@ import supervision as sv
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from utils import setup_video_processing
+import os
 
 def create_keypoint_movement_visualization(video_path, num_frames=10, start_seconds=19):
     # Setup video processing
@@ -18,7 +19,7 @@ def create_keypoint_movement_visualization(video_path, num_frames=10, start_seco
     # Initialize Roboflow client
     CLIENT = InferenceHTTPClient(
         api_url="https://boulder-vision.roboflow.cloud",
-        api_key="CStUD4FGBWGrkAzyK7ou"
+        api_key=os.getenv("ROBOFLOW_API_KEY")
     )
 
     # Initialize keypoints history

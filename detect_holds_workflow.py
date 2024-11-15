@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import io
 from PIL import Image
+import os
 
 class ClimbingAnalyzer:
     def __init__(self, api_url, api_key, workspace_name, workflow_id):
@@ -260,7 +261,7 @@ class ClimbingAnalyzer:
 def main():
     # Configuration
     API_URL = "https://boulder-vision.roboflow.cloud"
-    API_KEY = "CStUD4FGBWGrkAzyK7ou"
+    API_KEY = os.getenv("ROBOFLOW_API_KEY")
     WORKSPACE_NAME = "daniels-workspace-dnmsg"
     WORKFLOW_ID = "detect-holds-v17"
     VIDEO_PATH = '/users/danielreiff/Downloads/IMG_3841.MOV'
