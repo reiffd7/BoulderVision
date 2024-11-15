@@ -3,13 +3,8 @@
 ## Overview
 BoulderVision is a computer vision tool that analyzes climbing movements in videos. It tracks a climber's movements, detects holds, and provides real-time visualization of movement patterns and velocity metrics.
 
-<p align="center">
-  <img src="assets/u9811453479_httpss.mj.runozM1nDbAHG0_can_you_write_BoulderVis_e4612d8a-df8b-4059-b99a-475dac29071e_3.png" width="200" height="200">
-</p>
 
-
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ClsECogdT7A)](https://www.youtube.com/embed/ClsECogdT7A)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ClsECogdT7A/0.jpg)](https://www.youtube.com/watch?v=ClsECogdT7A)
 
 
 ## Features
