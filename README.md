@@ -9,7 +9,7 @@ BoulderVision is a computer vision tool that analyzes climbing movements in vide
 
 
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ClsECogdT7A?si=huVahFDiowMkyi1g)](https://www.youtube.com/embed/ClsECogdT7A?si=huVahFDiowMkyi1g)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ClsECogdT7A)](https://www.youtube.com/embed/ClsECogdT7A)
 
 
 ## Features
