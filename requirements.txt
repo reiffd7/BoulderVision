@@ -1,0 +1,5 @@
+inference==0.29.0
+plotly==5.24.1
+PyYAML==6.0.2
+tqdm==4.67.1
+kaleido==0.2.1

@@ -11,13 +11,19 @@ from plotly.subplots import make_subplots
 import io
 from PIL import Image
 import os
+import yaml
 
 class ClimbingAnalyzer:
     def __init__(self, api_url, api_key, workspace_name, workflow_id):
         self.client = InferenceHTTPClient(api_url=api_url, api_key=api_key)
         self.workspace_name = workspace_name
         self.workflow_id = workflow_id
-        self.history_size = 10
+        
+        # Load config for history size
+        with open('config.yaml', 'r') as file:
+            config = yaml.safe_load(file)
+        self.history_size = config['analyzer']['history_size']
+        
         self.keypoints_history = [[[[0.0, 0.0] for _ in range(17)] 
                                  for _ in range(1)] 
                                  for _ in range(self.history_size)]
@@ -259,19 +265,25 @@ class ClimbingAnalyzer:
         return concatenated_frame, keypoint_similarities
 
 def main():
+    # Load configuration
+    with open('config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+    
     # Configuration
-    API_URL = "https://boulder-vision.roboflow.cloud"
-    API_KEY = os.getenv("ROBOFLOW_API_KEY")
-    WORKSPACE_NAME = "daniels-workspace-dnmsg"
-    WORKFLOW_ID = "detect-holds-v17"
-    VIDEO_PATH = '/users/danielreiff/Downloads/IMG_3841.MOV'
+    API_URL = config['api']['url']
+    API_KEY = os.getenv("ROBOFLOW_API_KEY")  # Keep this as env var for security
+    WORKSPACE_NAME = config['api']['workspace_name']
+    WORKFLOW_ID = config['api']['workflow_id']
+    VIDEO_PATH = config['video']['path']
+    OUTPUT_VIDEO_PATH = config['output']['video_path']
+    OUTPUT_DATA_PATH = config['output']['data_path']
     
     # Setup video processing
     frames_generator, total_frames, video_info = setup_video_processing(
         vid_path=VIDEO_PATH,
-        start_seconds=19,
-        end_seconds=45,
-        stride=1
+        start_seconds=config['video']['start_seconds'],
+        end_seconds=config['video']['end_seconds'],
+        stride=config['video']['stride']
     )
     
     # Initialize analyzer
@@ -286,7 +298,7 @@ def main():
     
     movement_data = []
     
-    with sv.VideoSink(target_path='output.mp4', video_info=output_video_info) as sink:
+    with sv.VideoSink(target_path=OUTPUT_VIDEO_PATH, video_info=output_video_info) as sink:
         for frame_num, frame in tqdm(enumerate(frames_generator)):
             processed_frame, keypoint_similarities = analyzer.process_frame(frame, frame_num)
             keypoint_similarities['frame_num'] = frame_num
@@ -294,7 +306,7 @@ def main():
             sink.write_frame(processed_frame)
     
     # Save movement data
-    pd.DataFrame(movement_data).to_csv('keypoint_movements.csv', index=False)
+    pd.DataFrame(movement_data).to_csv(OUTPUT_DATA_PATH, index=False)
 
 if __name__ == "__main__":
     main()

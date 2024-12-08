@@ -1,15 +1,60 @@
-# BoulderVision: Climbing Movement Analysis
+# BoulderVision: Climbing Movement Analysis 🧗‍♀️
 
-## Overview
 BoulderVision is a computer vision tool that analyzes climbing movements in videos. It tracks a climber's movements, detects holds, and provides real-time visualization of movement patterns and velocity metrics.
+
+![BoulderVision Demo](/assets/BoulderVision_Climbing_Movement_Analysis.gif)
 
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ClsECogdT7A/0.jpg)](https://www.youtube.com/watch?v=ClsECogdT7A)
 
 
+Ever wondered how your climbing moves stack up? BoulderVision is like having a personal climbing coach with a knack for data! Using the power of computer vision (thanks to OpenCV and Roboflow!), we analyze your climbing sessions, tracking every move, hold, and shift in velocity.
+
+Imagine having a tool that not only watches your climbs but also breaks down your movements into insightful metrics. Want to know if you're following the optimal path? Curious about your speed and efficiency on the wall? BoulderVision provides real-time visualizations and detailed analysis to help you climb smarter.
+
+Whether you're a coach refining techniques, a climber perfecting your project, or just someone who loves data-driven insights, BoulderVision turns your climbing footage into actionable feedback. No more guesswork—just clear, data-backed insights to help you send your projects with confidence!
+
+Ready to elevate your climbing game? Let's dive into the data and start analyzing those moves!
+
+
+
+
+## Getting Started
+
+1. Clone the repository
+```bash
+git clone https://github.com/danielreiff/boulder-vision.git
+```
+2. Create a Python environment and install dependencies
+```bash
+python3.11 -m venv boulder-vision
+source boulder-vision/bin/activate
+pip install -r requirements.txt
+pip install --upgrade supervision
+```
+3. Set up your Roboflow credentials
+```bash
+export ROBOFLOW_API_KEY="your_api_key"
+```
+4. Ensure your configurations are set in the config.yaml file.
+5. Run the script with your desired configuration
+```bash
+python main.py
+```
+6. Let the program run, observe status updates, and enjoy the output! The updates will be displayed in the terminal.
+```
+Video setup:
+- Duration: 64.4s (1.1min)
+- Processing from: 19.0s (0.3min)
+- Processing to: 45.0s (0.8min)
+- Frame stride: 1 (effective FPS: 29.0)
+- Frames to process: 754
+102it [11:33,  7.71s/it]
+```
+
 ## Features
 - **Pose Detection**: Tracks 17 key body points throughout the climbing sequence
-- **Hold Detection**: Identifies climbing holds in the frame
+- **Hold Detection**: Identifies climbing holds, their locations, and colors in the frame
 - **Movement Analysis**: 
   - Tracks cumulative movement over time
   - Calculates velocity ratios for movement analysis
@@ -19,44 +64,7 @@ BoulderVision is a computer vision tool that analyzes climbing movements in vide
   - Live plotting of movement metrics
   - Interactive display of hold-body point matching
 
-## Requirements
 
-Core dependencies:
-- OpenCV
-- NumPy
-- Plotly
-- Supervision
-- Roboflow Inference SDK
-- PIL
-- matplotlib
-- tqdm
-
-## Setup
-1. Clone the repository
-2. Install dependencies
-3. Set up your Roboflow credentials:
-   ```python
-   API_URL = "https://boulder-vision.roboflow.cloud"
-   API_KEY = "your_api_key"
-   ```
-
-## Usage
-```python
-from detect_holds_workflow import ClimbingAnalyzer
-
-### Initialize analyzer
-analyzer = ClimbingAnalyzer(
-api_url="your_api_url",
-api_key="your_api_key",
-workspace_name="your_workspace",
-workflow_id="your_workflow_id"
-)
-
-### Process a video
-video_path = "path/to/your/video.mp4"
-analyzer.process_video(video_path)
-
-```
 ## Movement Analysis Metrics
 
 The system calculates three key metrics to analyze movement patterns:
@@ -103,12 +111,26 @@ The script generates:
    - Movement metrics plots
 
 ## Configuration
-Key parameters can be adjusted in the script:
-- `start_seconds`: Start time for video processing
-- `end_seconds`: End time for video processing
-- `stride`: Frame processing stride
-- Plot dimensions and styling
-- Visualization overlay settings
+All parameters can be configured in `config.yaml`:
+
+```yaml
+video:
+  start_seconds: 0        # Start time for video processing
+  end_seconds: null       # End time (null for full video)
+  stride: 2              # Process every nth frame
+
+visualization:
+  plot:
+    width: 1920          # Output plot width
+    height: 1080         # Output plot height
+    style: "dark"        # Plot style theme
+  overlay:
+    show_keypoints: true # Display body keypoints
+    show_holds: true     # Display detected holds
+    show_metrics: true   # Display movement metrics
+```
+
+Modify these parameters in the config file before running the script to customize the analysis behavior and visualization output.
 
 ## Contributing
 Feel free to submit issues and enhancement requests!
