@@ -212,6 +212,9 @@ class ClimbingAnalyzer:
         hold_detections = result['hold_detections']
         points_holds_matches = result['points_holds_matches']
         
+        # Add points_holds_matches to keypoint_similarities
+        keypoint_similarities['points_holds_matches'] = str(points_holds_matches)  # Convert dict to string for CSV storage
+        
         # Process keypoints and detections
         keypoints = result['keypoint_outputs']
         detections = sv.Detections.from_inference(keypoints)
@@ -264,6 +267,36 @@ class ClimbingAnalyzer:
         
         return concatenated_frame, keypoint_similarities
 
+def analyze_climb_metrics(csv_path):
+    # Read the movement data
+    movement_data = pd.read_csv(csv_path)
+    
+    # Movement Dynamics (velocity_ratio)
+    velocity = movement_data['velocity_ratio'].dropna()
+    velocity_stats = {
+        'min': round(velocity.min(), 2),
+        'max': round(velocity.max(), 2),
+        'mean': round(velocity.mean(), 2)
+    }
+    
+    # Distance Coverage
+    distance = movement_data['cumulative_distance'].dropna()
+    distance_stats = {
+        'total': round(distance.sum(), 2),  # Sum all frame-to-frame movements
+        'mean_per_frame': round(distance.mean(), 2)  # Average movement per frame
+    }
+    
+    # Climb Duration
+    holds_data = movement_data['points_holds_matches'].apply(eval)
+    has_hold = holds_data.apply(lambda x: 
+        x['left_wrist'] is not None or x['right_wrist'] is not None)
+    
+    start_frame = movement_data[has_hold].iloc[0]['frame_num']
+    end_frame = movement_data[has_hold].iloc[-1]['frame_num']
+    duration_frames = end_frame - start_frame
+    
+    return velocity_stats, distance_stats, duration_frames
+
 def main():
     # Load configuration
     with open('config.yaml', 'r') as file:
@@ -307,6 +340,26 @@ def main():
     
     # Save movement data
     pd.DataFrame(movement_data).to_csv(OUTPUT_DATA_PATH, index=False)
+    
+    # After processing is complete
+    print("\nProcessing complete. Analyzing climb metrics...")
+    
+    velocity_stats, distance_stats, duration = analyze_climb_metrics(OUTPUT_DATA_PATH)
+    
+    print("\nClimbing Movement Analysis:")
+    print(f"\nClimb Duration: {duration} frames")
+    print(f"Climb Duration: {duration/video_info.fps} seconds")
+    
+    print("\n1. Movement Dynamics (velocity ratio):")
+    print(f"• Slowest movement: {velocity_stats['min']}x average speed")
+    print(f"• Fastest movement: {velocity_stats['max']}x average speed")
+    print(f"• Average movement speed: {velocity_stats['mean']}x")
+    print("  (Values > 1 indicate faster than average movements, < 1 indicate slower movements)")
+    
+    print("\n2. Distance Coverage (in pixels):")
+    print(f"• Total distance covered: {distance_stats['total']}")
+    print(f"• Average distance per frame: {distance_stats['mean_per_frame']}")
+    print("  (Higher values indicate more dynamic movement, lower values suggest static positions)")
 
 if __name__ == "__main__":
     main()

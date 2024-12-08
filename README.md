@@ -51,6 +51,27 @@ Video setup:
 - Frames to process: 754
 102it [11:33,  7.71s/it]
 ```
+Once the script has finished processing, you will see the following output:
+```
+Processing complete. Analyzing climb metrics...
+
+Climbing Movement Analysis:
+
+Climb Duration: 86 frames
+Climb Duration: 2.9655172413793105 seconds
+
+1. Movement Dynamics (velocity ratio):
+• Slowest movement: 0.07x average speed
+• Fastest movement: 8.76x average speed
+• Average movement speed: 1.09x
+  (Values > 1 indicate faster than average movements, < 1 indicate slower movements)
+
+2. Distance Coverage (in pixels):
+• Total distance covered: 48327.17
+• Average distance per frame: 627.63
+  (Higher values indicate more dynamic movement, lower values suggest static positions)
+```
+
 
 ## Features
 - **Pose Detection**: Tracks 17 key body points throughout the climbing sequence
