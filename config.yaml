@@ -1,0 +1,22 @@
+# API Configuration
+api:
+  url: "http://127.0.0.1:5000"
+  workspace_name: "daniels-workspace-dnmsg"
+  workflow_id: "detect-holds-v17"
+
+# Video Processing
+video:
+  path: "/users/danielreiff/Downloads/IMG_3841.MOV"
+  start_seconds: 19
+  end_seconds: 22
+  stride: 1
+
+# Analyzer Settings
+analyzer:
+  history_size: 10
+  logo_path: "/Users/danielreiff/Documents/BoulderVision/assets/u9811453479_httpss.mj.runozM1nDbAHG0_can_you_write_BoulderVis_e4612d8a-df8b-4059-b99a-475dac29071e_3.png"
+
+# Output Settings
+output:
+  video_path: "output.mp4"
+  data_path: "keypoint_movements.csv" 
